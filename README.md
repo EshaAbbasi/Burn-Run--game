@@ -1,7 +1,7 @@
 # Project Planning Deliverable:Burn & Run
 
 ## 1. Game Choice
-* **Game Title:**Burn & Run
+* **Game Title:** Burn & Run
 * **Game Concept:** The game will be built using HTML, CSS, and DOM-based JavaScript. The player controls a character image moving along a single axis (Up and Down along a track) to avoid fireballs launched from a cannon(image) on the opposite side of the screen.
 * **Modes:**
   * **Easy Mode:** Standard fireball speed and spawn interval along the player's line.
