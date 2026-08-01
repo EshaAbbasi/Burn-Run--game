@@ -11,10 +11,6 @@
 
 ## 2. Pseudocode for Overall Gameplay
 
-==========================================
-BURN & RUN — GAME LOGIC
-==========================================
-
 SETUP:
     Get player, cannon, track, scoreboard from page
     player, speed 
