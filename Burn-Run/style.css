@@ -1,0 +1,44 @@
+*{
+    margin:0;
+    padding:0;
+   
+}
+body
+{
+    background-image:url("bgone.jpg");
+    background-repeat: no-repeat;
+  
+}
+.introScreen
+{
+   display:flex;
+    justify-content:center;
+    align-items:center;
+    
+}
+.introScreen h1
+{
+    color:rgb(179, 3, 3);
+    font-size: 50px;
+    font-family: 'Sekuya', Courier, monospace;
+}
+.introStep
+{
+color:blue;
+font-size: 22px;
+text-align: center;
+
+}
+.instructions p{
+    color:black ;
+    font-weight: bold;
+  
+
+   
+}
+.instructions
+{
+    color:white;
+    font-size: 15px;
+    text-align: center;
+}
