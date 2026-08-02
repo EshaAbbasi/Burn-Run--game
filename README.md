@@ -2,7 +2,7 @@
 
 ## 1. Game Choice
 * **Game Title:** Burn & Run
-* **Game Concept:** The game will be built using HTML, CSS, and DOM-based JavaScript. The player controls a character image moving along a single axis (Up and Down along a track) to avoid fireballs launched from a cannon (image) on the opposite side of the screen.
+* **Game Concept:** The game will be built using HTML, CSS, and DOM-based JavaScript. The player controls a character image moving along a single axis (Up/Down & Right/Left along a track) to avoid fireballs launched from a cannon (image) on the opposite side of the screen.
 * **Modes:**
   * **Easy Mode:** Standard fireball speed and spawn interval along the player's line.
   * **Hard Mode:** Adds obstacles on the path and fireball together.
@@ -17,7 +17,9 @@
 * Fireballs = [], obstacles = []
 
 **MOVE PLAYER (on key press):**
-* Up arrow / W -> player(jump)
+* Up arrow  -> player(jump)
+* Left arrow  -> player(Left)
+* Right arrow  -> player(Right)
 
 **SPAWN FIREBALL (cannon fires):**
 * If game is over -> stop
