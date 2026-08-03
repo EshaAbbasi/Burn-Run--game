@@ -90,14 +90,3 @@ body {
     margin-top: 40px;
 }
 
-.score {
-    font-size: 26px;
-    font-weight: bold;
-    color: white;
-}
-
-.game-over {
-    font-size: 32px;
-    font-weight: bold;
-    color: red;
-}
