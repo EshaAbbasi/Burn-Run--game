@@ -89,4 +89,69 @@ body {
     align-items: center;
     margin-top: 40px;
 }
+.play-area{
+    position: relative;
+    width: 800px;
+    max-width: 90vw;
+    height: 400px;
+     margin:20px auto;
+    border: 2px solid black;
+    overflow: hidden;
+    
+    
+}
+.character{
+    
 
+     position: absolute;
+     top:200px;
+     left:auto;
+     height:60px;
+     width: 60px;
+}
+.cannon{
+  mix-blend-mode: screen;
+   position: absolute;
+     top:200px;
+     right:40px;
+     height:70px;
+     width: 70px;
+}
+.fireball{
+    mix-blend-mode: screen;
+     position: absolute;
+     top:180px;
+     
+     right: -40px;
+     height:30px;
+     width: 30px;
+}   
+.fireballAni
+{
+animation:fireballMove 2s linear infinite;
+
+}
+@keyframes fireballMove {
+    from { right: -40px; }
+    to   { right: 100%; }
+}
+.game-over {
+    font-size: 32px;
+    font-weight: bold;
+    color: red;
+    text-align: center;
+    margin-top: 10px;
+}
+
+#playAgainBtn {
+    display: block;
+    margin: 15px auto;
+    padding: 8px 18px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.hidden {
+    display: none !important;
+}

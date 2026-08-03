@@ -1,4 +1,4 @@
-//  variables 
+// variables 
 let score = 0;
 let cross = true;
 let gameLoop = null;
@@ -6,13 +6,13 @@ let nameplay = '';
 let difficulty = null;
 
 const diffSpeeds = {
-    easy: 4,
-    hard: 2
+    easy: 4,  
+    hard: 2   
 };
 
 
-const msgs = 1500;
 
+const msgs = 1500;
 
 const startButton = document.getElementById('startButton');
 const message = document.getElementById('message');
@@ -63,5 +63,60 @@ function begin(name, level) {
     }, msgs);
 }
 
+function startGame(level) {
+    difficulty = level; 
 
+    introScreen.hidden = true;  
+    introStep.hidden = true;
+    instructions.hidden = true;
+    gameContainer.hidden = false;
+     const fireball = document.getElementById('fireball');
+    fireball.classList.add('fireballAni');
+    fireball.style.animationDuration = diffSpeeds[difficulty] + 's';
+    document.addEventListener('keydown', handleKeyPress);
+    beginGameLoop();
+}
 
+function handleKeyPress(e) {
+    const character = document.getElementById('character');
+    const playArea = document.getElementById('playArea');
+    const moveStep = 25;
+
+    const cy = parseInt(window.getComputedStyle(character, null).getPropertyValue('top'));
+    const maxTop = playArea.clientHeight - character.offsetHeight;
+
+    if (e.key === 'ArrowUp') {
+        character.style.top = Math.max(0, cy - moveStep) + 'px';
+    }
+    if (e.key === 'ArrowDown') {
+        character.style.top = Math.min(maxTop, cy + moveStep) + 'px';
+    }
+}
+
+function beginGameLoop() {
+    gameLoop = setInterval(() => {
+        const character = document.getElementById('character');
+        const fireball = document.getElementById('fireball');
+
+        const charRect = character.getBoundingClientRect();
+        const ballRect = fireball.getBoundingClientRect();
+
+        const offsetX = Math.abs(charRect.left - ballRect.left);
+        const offsetY = Math.abs(charRect.top - ballRect.top);
+
+        if (offsetX < 50 && offsetY < 50) {
+            gameOverMsg.textContent = `Game Over, ${nameplay}!`;
+            fireball.classList.remove('fireballAni');
+            playAgainBtn.classList.remove('hidden');
+
+            clearInterval(gameLoop);
+            document.removeEventListener('keydown', handleKeyPress);
+        }
+        else if (offsetX < 120 && cross) {
+            score += 1;
+            updateScore(score);
+            cross = false;
+            setTimeout(() => { cross = true; }, 1000);
+        }
+    }, 10);
+}
