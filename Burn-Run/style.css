@@ -1,59 +1,103 @@
-*{
-    margin:0;
-    padding:0;
-    height:100;
-   
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
-body
-{
-    background-image:url("bgone.jpg");
+
+html, body {
+    min-height: 100%;
+}
+
+body {
+    background-image: url("bgone.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
     min-height: 100vh;
-  
 }
-.introScreen
-{
-   display:flex;
-    justify-content:center;
-    align-items:center;
-    
+
+/* native [hidden] handles display:none, but this makes it explicit
+   in case any rule above tries to override it with display:flex/block */
+[hidden] {
+    display: none !important;
 }
-.introScreen h1
-{
-    color:rgb(179, 3, 3);
+
+.introScreen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.introScreen h1 {
+    color: rgb(179, 3, 3);
     font-size: 50px;
     font-family: 'Sekuya', Courier, monospace;
 }
-.introStep
-{
-color:blue;
-font-size: 30px;
-text-align: center;
 
+.introStep {
+    color: blue;
+    font-size: 30px;
+    text-align: center;
 }
-.instructions p{
-    color:black ;
+
+.instructions p {
+    color: black;
     font-weight: bold;
-  
-
-   
 }
-.instructions
-{
-    color:rgb(2, 56, 14);
+
+.instructions {
+    color: rgb(2, 56, 14);
     font-size: 24px;
     text-align: center;
-    font-weight: italic;
+    font-style: italic;
 }
-#startButton
-{
-    
-background-color: rgb(5, 35, 90);
-font-size: 20px;
-font-weight: bold;
-display: block;
-margin-left: auto;
-margin-right: auto;
+
+#startButton {
+    background-color: rgb(5, 35, 90);
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.message {
+    display: block;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    color: darkred;
+    margin: 10px auto;
+}
+
+.input-container,
+.levels {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 40px;
+}
+
+.score {
+    font-size: 26px;
+    font-weight: bold;
+    color: white;
+}
+
+.game-over {
+    font-size: 32px;
+    font-weight: bold;
+    color: red;
 }

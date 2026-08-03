@@ -4,16 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Burn & Run</title>
-      <link rel="stylesheet" href="style.css" />
-  <script defer src="app.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="app.js"></script>
 </head>
 <body>
+
+    <!-- INTRO / INSTRUCTIONS (always visible until game starts) -->
     <div class="introScreen">
-       <h1> Burn & Run</h1> </div>
-       <div class="introStep">
-       <h2> A simple game where you burn calories and run! </h2>
-       </div>   
-       <div class="instructions">
+        <h1>Burn & Run</h1>
+    </div>
+    <div class="introStep">
+        <h2>A simple game where you burn calories and run!</h2>
+    </div>
+    <div class="instructions">
         <p><br>Instructions:</p>
         <ul>
             <li><br>Click the "Start Game" button to begin.</li>
@@ -21,18 +24,32 @@
             <li>Select a difficulty level: Easy or Hard.</li>
             <li>Run and escape fireball to win!<br></li>
         </ul>
-    </div>   
-       <button id="startButton">Start Game</button>
-       <button id="message" class="message"></button>
-   
-    <div class="input-container" >
+    </div>
+
+    <button id="startButton">Start Game</button>
+
+    <!-- Message box used at every step (welcome msg, level msg, errors) -->
+    <p id="message" class="message"></p>
+
+    <!-- STEP 1: name entry, hidden until Start Game is clicked -->
+    <div class="input-container" id="inputContainer" hidden>
         <label for="playerName">Enter your name:</label>
         <input type="text" id="playerName" placeholder="Your Name">
         <button id="submitNameButton">Submit</button>
-   <div class="levels">
-    <button id="level1Button">Easy</button>
-    <button id="level2Button">Hard</button>
-   </div>
-      
+    </div>
+
+    <!-- STEP 2: level select, hidden until name is submitted -->
+    <div class="levels" id="levels" hidden>
+        <label for="levelSelect">Select a level:</label>
+        <button id="level1Button">Easy</button>
+        <button id="level2Button">Hard</button>
+    </div>
+
+    <!-- STEP 3: the actual game, hidden until a level is chosen -->
+    <div class="game-container" id="gameContainer" hidden>
+        <div class="score" id="score">Score: 0</div>
+        <div class="game-over" id="gameOver" hidden>Game Over</div>
+    </div>
+
 </body>
 </html>
