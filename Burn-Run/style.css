@@ -97,7 +97,8 @@ body {
      margin:20px auto;
     border: 2px solid black;
     overflow: hidden;
-    
+    background-color:white;
+
     
 }
 .character{
@@ -106,25 +107,25 @@ body {
      position: absolute;
      top:200px;
      left:auto;
-     height:60px;
-     width: 60px;
+     height:90px;
+     width: 120px;
 }
 .cannon{
-  mix-blend-mode: screen;
+  
    position: absolute;
      top:200px;
-     right:40px;
-     height:70px;
-     width: 70px;
+     right:2px;
+     height:80px;
+     width: 120px;
 }
 .fireball{
     mix-blend-mode: screen;
      position: absolute;
-     top:180px;
+     top:210px;
      
-     right: -40px;
-     height:30px;
-     width: 30px;
+     right: 210px;
+     height:18px;
+     width: 90px;
 }   
 .fireballAni
 {
@@ -132,7 +133,7 @@ animation:fireballMove 2s linear infinite;
 
 }
 @keyframes fireballMove {
-    from { right: -40px; }
+    from { right: 100px; }
     to   { right: 100%; }
 }
 .game-over {
