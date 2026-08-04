@@ -135,7 +135,7 @@ function checkCollision(character, fireball) {
     const offsetX = Math.abs(charRect.left - ballRect.left);
     const offsetY = Math.abs(charRect.top - ballRect.top);
 
-    return { hit: offsetX < 30 && offsetY < 30, near: offsetX < 120 };
+    return { hit: offsetX < 90 && offsetY < 40, near: offsetX < 120 };
 }
 
 function beginGameLoop() {
