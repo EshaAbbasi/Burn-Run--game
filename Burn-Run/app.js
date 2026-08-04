@@ -1,4 +1,3 @@
-// variables
 let score = 0;
 let cross = true;
 let gameLoop = null;
@@ -84,11 +83,14 @@ function startGame(level) {
     const fireball2 = document.getElementById('fireball2');
     const fireball3 = document.getElementById('fireball3');
 
-    // Both fireballs get the animation + correct speed for the chosen difficulty
-    [fireball, fireball2,fireball3].forEach(fb => {
-        fb.classList.add('fireballAni');
-        fb.style.animationDuration = diffSpeeds[difficulty] + 's';
-    });
+    fireball.classList.add('fireballAni');
+    fireball.style.animationDuration = diffSpeeds[difficulty] + 's';
+
+    fireball2.classList.add('fireballAni');
+    fireball2.style.animationDuration = diffSpeeds[difficulty] + 's';
+
+    fireball3.classList.add('fireballAni');
+    fireball3.style.animationDuration = diffSpeeds[difficulty] + 's';
 
     document.addEventListener('keydown', handleKeyPress);
     beginGameLoop();
@@ -128,33 +130,39 @@ function startTimer() {
     }, 1000);
 }
 
-function checkCollision(character, fireball) {
-    const charRect = character.getBoundingClientRect();
-    const ballRect = fireball.getBoundingClientRect();
-
-    const offsetX = Math.abs(charRect.left - ballRect.left);
-    const offsetY = Math.abs(charRect.top - ballRect.top);
-
-    return { hit: offsetX < 90 && offsetY < 40, near: offsetX < 120 };
-}
-
 function beginGameLoop() {
     gameLoop = setInterval(() => {
         const character = document.getElementById('character');
         const fireball = document.getElementById('fireball');
         const fireball2 = document.getElementById('fireball2');
-          const fireball3 = document.getElementById('fireball3');
+        const fireball3 = document.getElementById('fireball3');
 
-        const result1 = checkCollision(character, fireball);
-        const result2 = checkCollision(character, fireball2);
-        const result3 = checkCollision(character, fireball3);
+        const charRect = character.getBoundingClientRect();
 
-        if (result1.hit || result2.hit || result3.hit) {
+        const ballRect1 = fireball.getBoundingClientRect();
+        const offsetX1 = Math.abs(charRect.left - ballRect1.left);
+        const offsetY1 = Math.abs(charRect.top - ballRect1.top);
+        const hit1 = offsetX1 < 90 && offsetY1 < 40;
+        const near1 = offsetX1 < 120;
+
+        const ballRect2 = fireball2.getBoundingClientRect();
+        const offsetX2 = Math.abs(charRect.left - ballRect2.left);
+        const offsetY2 = Math.abs(charRect.top - ballRect2.top);
+        const hit2 = offsetX2 < 90 && offsetY2 < 40;
+        const near2 = offsetX2 < 120;
+
+        const ballRect3 = fireball3.getBoundingClientRect();
+        const offsetX3 = Math.abs(charRect.left - ballRect3.left);
+        const offsetY3 = Math.abs(charRect.top - ballRect3.top);
+        const hit3 = offsetX3 < 90 && offsetY3 < 40;
+        const near3 = offsetX3 < 120;
+
+        if (hit1 || hit2 || hit3) {
             endGame(false);
             return;
         }
 
-        if ((result1.near || result2.near|| result3.near) && cross) {
+        if ((near1 || near2 || near3) && cross) {
             score += 1;
             updateScore(score);
             cross = false;
@@ -216,19 +224,22 @@ function restart() {
     clearInterval(gameLoop);
     clearInterval(timerInterval);
 
- 
-    [fireball, fireball2,fireball3].forEach(fb => {
-        fb.classList.remove('fireballAni');
-    });
-   
+    fireball.classList.remove('fireballAni');
+    fireball2.classList.remove('fireballAni');
+    fireball3.classList.remove('fireballAni');
+
     void fireball.offsetWidth;
     void fireball2.offsetWidth;
         void fireball3.offsetWidth;
 
-    [fireball, fireball2,fireball3].forEach(fb => {
-        fb.classList.add('fireballAni');
-        fb.style.animationDuration = diffSpeeds[difficulty] + 's';
-    });
+    fireball.classList.add('fireballAni');
+    fireball.style.animationDuration = diffSpeeds[difficulty] + 's';
+
+    fireball2.classList.add('fireballAni');
+    fireball2.style.animationDuration = diffSpeeds[difficulty] + 's';
+
+    fireball3.classList.add('fireballAni');
+    fireball3.style.animationDuration = diffSpeeds[difficulty] + 's';
 
     document.addEventListener('keydown', handleKeyPress);
     beginGameLoop();

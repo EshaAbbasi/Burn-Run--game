@@ -16,8 +16,6 @@ body {
     min-height: 100vh;
 }
 
-/* native [hidden] handles display:none, but this makes it explicit
-   in case any rule above tries to override it with display:flex/block */
 [hidden] {
     display: none !important;
 }
@@ -74,13 +72,71 @@ body {
     margin: 10px auto;
 }
 
-.input-container,
-.levels {
+.input-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
     margin-top: 20px;
+}
+
+.levels {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 9px 20px;
+    margin-top: 20px;
+}
+
+.input-container label,
+.levels label {
+    font-size: 20px;
+    font-weight: bold;
+    color: rgb(5, 35, 90);
+}
+
+.levels label {
+    flex-basis: 100%;
+    text-align: center;
+}
+
+#playerName {
+    padding: 9px 13px;
+    font-size: 18px;
+    border: 2px solid #05235a;
+    border-radius: 7px;
+    width: 240px;
+    max-width: 80vw;
+    text-align: center;
+}
+
+#submitNameButton {
+    background-color: #05235a;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 7px 22px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#level1Button {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 11px 28px;
+    border-radius: 7px;
+    background-color: green;
+    color: white;
+}
+
+#level2Button {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 11px 28px;
+    border-radius: 7px;
+    background-color: rgb(179, 3, 3);
+    color: white;
 }
 
 .game-container {
