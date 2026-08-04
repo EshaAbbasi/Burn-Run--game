@@ -156,3 +156,10 @@ animation:fireballMove 2s linear infinite;
 .hidden {
     display: none !important;
 }
+.cannon2 {
+    top: 80px;   /* was 200px on the original — pushes this one to the top */
+}
+
+.fireball2 {
+    top: 90px;   /* was 210px on the original */
+}
