@@ -5,6 +5,7 @@ let gameLoop = null;
 let nameplay = '';
 let difficulty = null;
 
+
 const diffSpeeds = {
     easy: 4,  
     hard: 2   
@@ -91,6 +92,7 @@ function handleKeyPress(e) {
     if (e.key === 'ArrowDown') {
         character.style.top = Math.min(maxTop, cy + moveStep) + 'px';
     }
+
 }
 
 function beginGameLoop() {
@@ -119,4 +121,18 @@ function beginGameLoop() {
             setTimeout(() => { cross = true; }, 1000);
         }
     }, 10);
+    
+}
+function updateScore(score)
+{
+   scoreCont.textContent='your score is '+ score;
+}
+function restart(){
+    
+            const character = document.getElementById('character');
+        const fireball = document.getElementById('fireball');
+            score=0;
+            updateScore(score);
+            cross = false;
+    
 }
