@@ -82,9 +82,10 @@ function startGame(level) {
 
     const fireball = document.getElementById('fireball');
     const fireball2 = document.getElementById('fireball2');
+    const fireball3 = document.getElementById('fireball3');
 
     // Both fireballs get the animation + correct speed for the chosen difficulty
-    [fireball, fireball2].forEach(fb => {
+    [fireball, fireball2,fireball3].forEach(fb => {
         fb.classList.add('fireballAni');
         fb.style.animationDuration = diffSpeeds[difficulty] + 's';
     });
@@ -134,7 +135,7 @@ function checkCollision(character, fireball) {
     const offsetX = Math.abs(charRect.left - ballRect.left);
     const offsetY = Math.abs(charRect.top - ballRect.top);
 
-    return { hit: offsetX < 50 && offsetY < 50, near: offsetX < 120 };
+    return { hit: offsetX < 30 && offsetY < 30, near: offsetX < 120 };
 }
 
 function beginGameLoop() {
@@ -142,16 +143,18 @@ function beginGameLoop() {
         const character = document.getElementById('character');
         const fireball = document.getElementById('fireball');
         const fireball2 = document.getElementById('fireball2');
+          const fireball3 = document.getElementById('fireball3');
 
         const result1 = checkCollision(character, fireball);
         const result2 = checkCollision(character, fireball2);
+        const result3 = checkCollision(character, fireball3);
 
-        if (result1.hit || result2.hit) {
+        if (result1.hit || result2.hit || result3.hit) {
             endGame(false);
             return;
         }
 
-        if ((result1.near || result2.near) && cross) {
+        if ((result1.near || result2.near|| result3.near) && cross) {
             score += 1;
             updateScore(score);
             cross = false;
@@ -167,6 +170,7 @@ function beginGameLoop() {
 function endGame(won) {
     const fireball = document.getElementById('fireball');
     const fireball2 = document.getElementById('fireball2');
+    const fireball3 = document.getElementById('fireball3');
 
     clearInterval(gameLoop);
     clearInterval(timerInterval);
@@ -174,6 +178,7 @@ function endGame(won) {
 
     fireball.classList.remove('fireballAni');
     fireball2.classList.remove('fireballAni');
+        fireball3.classList.remove('fireballAni');
 
     if (won) {
         gameOverMsg.textContent = `You won the game, ${nameplay}!`;
@@ -196,8 +201,8 @@ function restart() {
     const character = document.getElementById('character');
     const fireball = document.getElementById('fireball');
     const fireball2 = document.getElementById('fireball2');
+    const fireball3 = document.getElementById('fireball3');
 
-    
     score = 0;
     cross = true;
     timeLeft = 60;
@@ -212,14 +217,15 @@ function restart() {
     clearInterval(timerInterval);
 
  
-    [fireball, fireball2].forEach(fb => {
+    [fireball, fireball2,fireball3].forEach(fb => {
         fb.classList.remove('fireballAni');
     });
    
     void fireball.offsetWidth;
     void fireball2.offsetWidth;
+        void fireball3.offsetWidth;
 
-    [fireball, fireball2].forEach(fb => {
+    [fireball, fireball2,fireball3].forEach(fb => {
         fb.classList.add('fireballAni');
         fb.style.animationDuration = diffSpeeds[difficulty] + 's';
     });
