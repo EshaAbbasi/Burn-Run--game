@@ -126,6 +126,7 @@ body {
     font-weight: bold;
     background-color: green;
     color: white;
+    padding: 7px 22px;
 }
 
 #level2Button {
@@ -133,6 +134,7 @@ body {
     font-weight: bold;
     background-color:red;
     color: white;
+    padding: 7px 22px;
 }
 
 .game-container {
@@ -160,7 +162,7 @@ body {
 }
 .cannon{
      position: absolute;
-     top:200px;
+     top:230px;
      right:2px;
      height:80px;
      width: 120px;
@@ -188,7 +190,7 @@ body {
     top: 70px;
 }
 .cannon3 {
-    top:300px;
+    top: 315px;
 }
 
 .fireball3 {
@@ -196,7 +198,7 @@ body {
 }
 
 .cannon4 {
-    top: 20px;
+    top: 1px;
 }
 
 .fireball4 {
@@ -204,7 +206,7 @@ body {
 }
 
 .cannon5 {
-    top: 320px;
+    top: 150px;
 }
 
 .fireball5 {

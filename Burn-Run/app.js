@@ -1,3 +1,4 @@
+//varaibles
 let score = 0;
 let cross = true;
 let gameLoop = null;
@@ -12,11 +13,17 @@ const diffSpeeds = {
 };
 
 const winScores = {
-    easy: 10,
-    hard: 15
+    easy: 15,
+    hard: 20
 };
 
 const msgs = 1500;
+musicbg=new Audio('music.mp3');
+musicover=new Audio('over.wav');
+
+    setTimeout(() => {
+       musicbg.play();
+    }, 1000);
 
 const startButton = document.getElementById('startButton');
 const message = document.getElementById('message');
@@ -166,14 +173,20 @@ function beginGameLoop() {
 
             if (hit) anyHit = true;
             if (near) anyNear = true;
+            
+           
         });
+
 
         if (anyHit) {
             endGame(false);
             return;
+              musicbg.play();
+           
         }
 
         if (anyNear && cross) {
+            musicbg.play();
             score += 1;
             updateScore(score);
             cross = false;
@@ -198,9 +211,15 @@ function endGame(won) {
     if (won) {
         gameOverMsg.textContent = `You won the game, ${nameplay}!`;
         gameOverMsg.style.color = 'green';
+         musicbg.play();
+            musicover.pause();
     } else {
         gameOverMsg.textContent = `You lose the game, ${nameplay}!`;
         gameOverMsg.style.color = 'red';
+         musicbg.pause();
+            musicover.play();
+        
+
     }
 
 
