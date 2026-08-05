@@ -52,6 +52,9 @@
 Html,css,js
 
 ## 4.Attributions:
-assests
+assests:
+image
+charcter,canono,fireball
+music:gameover,background
 font:
-language:
+language: 
