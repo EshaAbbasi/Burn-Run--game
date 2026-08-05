@@ -124,8 +124,6 @@ body {
 #level1Button {
     font-size: 20px;
     font-weight: bold;
-    padding: 11px 28px;
-    border-radius: 7px;
     background-color: green;
     color: white;
 }
@@ -133,9 +131,7 @@ body {
 #level2Button {
     font-size: 20px;
     font-weight: bold;
-    padding: 11px 28px;
-    border-radius: 7px;
-    background-color: rgb(179, 3, 3);
+    background-color:red;
     color: white;
 }
 
@@ -150,16 +146,12 @@ body {
     width: 800px;
     max-width: 90vw;
     height: 400px;
-     margin:20px auto;
+    margin:20px auto;
     border: 2px solid black;
     overflow: hidden;
     background-color:white;
-
-    
 }
 .character{
-    
-
      position: absolute;
      top:200px;
      left:auto;
@@ -167,8 +159,7 @@ body {
      width: 120px;
 }
 .cannon{
-  
-   position: absolute;
+     position: absolute;
      top:200px;
      right:2px;
      height:80px;
@@ -176,22 +167,50 @@ body {
 }
 .fireball{
     mix-blend-mode: screen;
-     position: absolute;
-     top:210px;
-     
-     right: 210px;
-     height:18px;
-     width: 90px;
-}   
-.fireballAni
-{
-animation:fireballMove 2s linear infinite;
-
+    position: absolute;
+    top:210px;
+    right: 210px;
+    height:18px;
+    width: 90px;
+}
+.fireballAni {
+    animation: fireballMove 2s linear infinite;
 }
 @keyframes fireballMove {
     from { right: 100px; }
     to   { right: 100%; }
 }
+.cannon2 {
+    top: 70px;
+}
+
+.fireball2 {
+    top: 70px;
+}
+.cannon3 {
+    top:300px;
+}
+
+.fireball3 {
+    top: 350px;
+}
+
+.cannon4 {
+    top: 20px;
+}
+
+.fireball4 {
+    top: 20px;
+}
+
+.cannon5 {
+    top: 320px;
+}
+
+.fireball5 {
+    top: 320px;
+}
+
 .game-over {
     font-size: 32px;
     font-weight: bold;
@@ -207,23 +226,9 @@ animation:fireballMove 2s linear infinite;
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
-        background-color: #5d5db7;
+    background-color: #5d5db7;
 }
 
 .hidden {
     display: none !important;
-}
-.cannon2 {
-    top: 70px;   
-}
-
-.fireball2 {
-    top: 70px;  
-}
-.cannon3 {
-    top:300px;   
-}
-
-.fireball3 {
-    top: 350px;  
 }

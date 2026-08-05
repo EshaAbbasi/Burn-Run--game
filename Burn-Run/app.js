@@ -7,8 +7,8 @@ let difficulty = null;
 let timeLeft = 10;
 
 const diffSpeeds = {
-    easy: 4,
-    hard: 2
+    easy: 2,
+    hard: 1.5
 };
 
 const winScores = {
@@ -33,6 +33,9 @@ const playAgainBtn = document.getElementById('playAgainBtn');
 const introScreen = document.querySelector('.introScreen');
 const introStep = document.querySelector('.introStep');
 const instructions = document.querySelector('.instructions');
+
+
+const fireballIds = ['fireball', 'fireball2', 'fireball3', 'fireball4', 'fireball5'];
 
 startButton.addEventListener('click', () => {
     startButton.hidden = true;
@@ -71,6 +74,13 @@ function begin(name, level) {
     }, msgs);
 }
 
+function randomizeTop(el) {
+    const playArea = document.getElementById('playArea');
+    const maxTop = playArea.clientHeight - el.offsetHeight;
+    const newTop = Math.floor(Math.random() * maxTop);
+    el.style.top = newTop + 'px';
+}
+
 function startGame(level) {
     difficulty = level;
 
@@ -79,18 +89,14 @@ function startGame(level) {
     instructions.hidden = true;
     gameContainer.hidden = false;
 
-    const fireball = document.getElementById('fireball');
-    const fireball2 = document.getElementById('fireball2');
-    const fireball3 = document.getElementById('fireball3');
+    fireballIds.forEach(id => {
+        const fireball = document.getElementById(id);
+        fireball.classList.add('fireballAni');
+        fireball.style.animationDuration = diffSpeeds[difficulty] + 's';
 
-    fireball.classList.add('fireballAni');
-    fireball.style.animationDuration = diffSpeeds[difficulty] + 's';
-
-    fireball2.classList.add('fireballAni');
-    fireball2.style.animationDuration = diffSpeeds[difficulty] + 's';
-
-    fireball3.classList.add('fireballAni');
-    fireball3.style.animationDuration = diffSpeeds[difficulty] + 's';
+        randomizeTop(fireball);
+        fireball.addEventListener('animationiteration', () => randomizeTop(fireball));
+    });
 
     document.addEventListener('keydown', handleKeyPress);
     beginGameLoop();
@@ -133,36 +139,41 @@ function startTimer() {
 function beginGameLoop() {
     gameLoop = setInterval(() => {
         const character = document.getElementById('character');
-        const fireball = document.getElementById('fireball');
-        const fireball2 = document.getElementById('fireball2');
-        const fireball3 = document.getElementById('fireball3');
-
         const charRect = character.getBoundingClientRect();
 
-        const ballRect1 = fireball.getBoundingClientRect();
-        const offsetX1 = Math.abs(charRect.left - ballRect1.left);
-        const offsetY1 = Math.abs(charRect.top - ballRect1.top);
-        const hit1 = offsetX1 < 90 && offsetY1 < 40;
-        const near1 = offsetX1 < 120;
+      
+        const CHAR_PAD_X = 30;
+        const CHAR_PAD_Y = 15;
+        const hitBox = {
+            left: charRect.left + CHAR_PAD_X,
+            right: charRect.right - CHAR_PAD_X,
+            top: charRect.top + CHAR_PAD_Y,
+            bottom: charRect.bottom - CHAR_PAD_Y
+        };
 
-        const ballRect2 = fireball2.getBoundingClientRect();
-        const offsetX2 = Math.abs(charRect.left - ballRect2.left);
-        const offsetY2 = Math.abs(charRect.top - ballRect2.top);
-        const hit2 = offsetX2 < 90 && offsetY2 < 40;
-        const near2 = offsetX2 < 120;
+        let anyHit = false;
+        let anyNear = false;
 
-        const ballRect3 = fireball3.getBoundingClientRect();
-        const offsetX3 = Math.abs(charRect.left - ballRect3.left);
-        const offsetY3 = Math.abs(charRect.top - ballRect3.top);
-        const hit3 = offsetX3 < 90 && offsetY3 < 40;
-        const near3 = offsetX3 < 120;
+        fireballIds.forEach(id => {
+            const fireball = document.getElementById(id);
+            const ballRect = fireball.getBoundingClientRect();
 
-        if (hit1 || hit2 || hit3) {
+          
+            const hit = hitBox.left < ballRect.right && hitBox.right > ballRect.left &&
+                        hitBox.top < ballRect.bottom && hitBox.bottom > ballRect.top;
+
+            const near = charRect.left < ballRect.right && charRect.right > ballRect.left;
+
+            if (hit) anyHit = true;
+            if (near) anyNear = true;
+        });
+
+        if (anyHit) {
             endGame(false);
             return;
         }
 
-        if ((near1 || near2 || near3) && cross) {
+        if (anyNear && cross) {
             score += 1;
             updateScore(score);
             cross = false;
@@ -176,17 +187,13 @@ function beginGameLoop() {
 }
 
 function endGame(won) {
-    const fireball = document.getElementById('fireball');
-    const fireball2 = document.getElementById('fireball2');
-    const fireball3 = document.getElementById('fireball3');
-
     clearInterval(gameLoop);
     clearInterval(timerInterval);
     document.removeEventListener('keydown', handleKeyPress);
 
-    fireball.classList.remove('fireballAni');
-    fireball2.classList.remove('fireballAni');
-        fireball3.classList.remove('fireballAni');
+    fireballIds.forEach(id => {
+        document.getElementById(id).classList.remove('fireballAni');
+    });
 
     if (won) {
         gameOverMsg.textContent = `You won the game, ${nameplay}!`;
@@ -196,7 +203,7 @@ function endGame(won) {
         gameOverMsg.style.color = 'red';
     }
 
-   
+
     playAgainBtn.classList.remove('hidden');
     playAgainBtn.hidden = false;
 }
@@ -207,15 +214,11 @@ function updateScore(score) {
 
 function restart() {
     const character = document.getElementById('character');
-    const fireball = document.getElementById('fireball');
-    const fireball2 = document.getElementById('fireball2');
-    const fireball3 = document.getElementById('fireball3');
 
     score = 0;
     cross = true;
     timeLeft = 60;
     updateScore(score);
-
 
     gameOverMsg.textContent = '';
     playAgainBtn.classList.add('hidden');
@@ -224,22 +227,14 @@ function restart() {
     clearInterval(gameLoop);
     clearInterval(timerInterval);
 
-    fireball.classList.remove('fireballAni');
-    fireball2.classList.remove('fireballAni');
-    fireball3.classList.remove('fireballAni');
-
-    void fireball.offsetWidth;
-    void fireball2.offsetWidth;
-        void fireball3.offsetWidth;
-
-    fireball.classList.add('fireballAni');
-    fireball.style.animationDuration = diffSpeeds[difficulty] + 's';
-
-    fireball2.classList.add('fireballAni');
-    fireball2.style.animationDuration = diffSpeeds[difficulty] + 's';
-
-    fireball3.classList.add('fireballAni');
-    fireball3.style.animationDuration = diffSpeeds[difficulty] + 's';
+    fireballIds.forEach(id => {
+        const fireball = document.getElementById(id);
+        fireball.classList.remove('fireballAni');
+        void fireball.offsetWidth;
+        fireball.classList.add('fireballAni');
+        fireball.style.animationDuration = diffSpeeds[difficulty] + 's';
+        randomizeTop(fireball);
+    });
 
     document.addEventListener('keydown', handleKeyPress);
     beginGameLoop();
