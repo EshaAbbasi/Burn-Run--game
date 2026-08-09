@@ -9,36 +9,38 @@
 </head>
 <body>
 
-    <div class="introScreen">
-        <h1>Burn & Run</h1>
-    </div>
-    <div class="introStep">
-        <h2>A simple game where you burn calories and run!</h2>
-    </div>
-    <div class="instructions">
-        <p><br>Instructions:</p>
-        <ul>
-            <li><br>Click the "Start Game" button to begin.</li>
-            <li>Enter your name when prompted.</li>
-            <li>Select a difficulty level: Easy or Hard.</li>
-            <li>Run and escape fireball to win!<br></li>
-        </ul>
-    </div>
+    <div class="content-card">
+        <div class="introScreen">
+            <h1>Burn & Run</h1>
+        </div>
+        <div class="introStep">
+            <h2>A simple game where you burn calories and run!</h2>
+        </div>
+        <div class="instructions">
+            <p>Instructions:</p>
+            <ul>
+                <li>Click the "Start Game" button to begin.</li>
+                <li>Enter your name when prompted.</li>
+                <li>Select a difficulty level: Easy or Hard.</li>
+                <li>Run and escape fireball to win!</li>
+            </ul>
+        </div>
 
-    <button id="startButton">Start Game</button>
+        <button id="startButton">Start Game</button>
 
-    <p id="message" class="message"></p>
+        <p id="message" class="message"></p>
 
-    <div class="input-container" id="inputContainer" hidden>
-        <label for="playerName">Enter your name:</label>
-        <input type="text" id="playerName" placeholder="Your Name">
-        <button id="submitNameButton">Submit</button>
-    </div>
+        <div class="input-container" id="inputContainer" hidden>
+            <label for="playerName">Enter your name:</label>
+            <input type="text" id="playerName" placeholder="Your Name">
+            <button id="submitNameButton">Submit</button>
+        </div>
 
-    <div class="levels" id="levels" hidden>
-        <label for="levelSelect">Select Difficulty Level:</label>
-        <button id="level1Button">Easy</button>
-        <button id="level2Button">Hard</button>
+        <div class="levels" id="levels" hidden>
+            <label for="levelSelect">Select Difficulty Level:</label>
+            <button id="level1Button">Easy</button>
+            <button id="level2Button">Hard</button>
+        </div>
     </div>
 
     <div class="game-container" id="gameContainer" hidden>
