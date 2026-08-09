@@ -13,11 +13,25 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+    background-attachment: fixed;
     min-height: 100vh;
+    padding: 20px;
 }
 
 [hidden] {
     display: none !important;
+}
+
+/* One solid card holds ALL the intro text, so it never sits directly
+   on top of bgone.jpg and its contrast is guaranteed, not dependent
+   on whatever part of the photo is behind it. */
+.content-card {
+    background-color: #ffffff;
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 25px 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
 }
 
 .introScreen {
@@ -30,17 +44,14 @@ body {
     color: rgb(179, 3, 3);
     font-size: 50px;
     font-family: 'Sekuya', Courier, monospace;
-}
-
-.introStep {
-    color: blue;
-    font-size: 30px;
     text-align: center;
 }
 
-.instructions p {
-    color: black;
-    font-weight: bold;
+.introStep {
+    color: rgb(0, 0, 210);
+    font-size: 30px;
+    text-align: center;
+    margin-top: 15px;
 }
 
 .instructions {
@@ -48,6 +59,18 @@ body {
     font-size: 24px;
     text-align: center;
     font-style: italic;
+    margin-top: 15px;
+}
+
+.instructions p {
+    color: black;
+    font-weight: bold;
+}
+
+.instructions ul {
+    text-align: left;
+    display: inline-block;
+    margin-top: 10px;
 }
 
 #startButton {
@@ -56,7 +79,7 @@ body {
     font-size: 20px;
     font-weight: bold;
     display: block;
-    margin: 20px auto;
+    margin: 20px auto 0;
     padding: 10px 20px;
     border: none;
     border-radius: 6px;
@@ -65,11 +88,12 @@ body {
 
 .message {
     display: block;
+    width: fit-content;
     text-align: center;
     font-size: 22px;
     font-weight: bold;
-    color: darkred;
-    margin: 10px auto;
+    color: rgb(139, 0, 0);
+    margin: 10px auto 0;
 }
 
 .input-container {
@@ -127,61 +151,88 @@ body {
     background-color: green;
     color: white;
     padding: 7px 22px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
 }
 
 #level2Button {
     font-size: 20px;
     font-weight: bold;
-    background-color:red;
+    /* Darkened from pure red (#ff0000) so white text clears 4.5:1
+       contrast at normal text size, not just the 3:1 large-text minimum. */
+    background-color: rgb(179, 0, 0);
     color: white;
     padding: 7px 22px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
 }
 
 .game-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 40px;
+    margin-top: 15px;
 }
-.play-area{
+
+.score {
+    background-color: rgb(5, 35, 90);
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 22px;
+    padding: 8px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+.play-area {
     position: relative;
     width: 800px;
     max-width: 90vw;
     height: 400px;
-    margin:20px auto;
+    margin: 20px auto;
     border: 2px solid black;
     overflow: hidden;
-    background-color:white;
+    background-color: white;
 }
-.character{
-     position: absolute;
-     top:200px;
-     left:auto;
-     height:90px;
-     width: 120px;
+
+.character {
+    position: absolute;
+    top: 200px;
+    left: auto;
+    height: 90px;
+    width: 120px;
 }
-.cannon{
-     position: absolute;
-     top:230px;
-     right:2px;
-     height:80px;
-     width: 120px;
+
+.cannon {
+    position: absolute;
+    top: 230px;
+    right: 2px;
+    height: 80px;
+    width: 120px;
 }
-.fireball{
+
+.fireball {
     mix-blend-mode: screen;
     position: absolute;
-    top:210px;
+    top: 210px;
     right: 210px;
-    height:18px;
+    height: 18px;
     width: 90px;
 }
+
 .fireballAni {
     animation: fireballMove 2s linear infinite;
 }
+
 @keyframes fireballMove {
     from { right: 100px; }
     to   { right: 100%; }
 }
+
 .cannon2 {
     top: 70px;
 }
@@ -189,6 +240,7 @@ body {
 .fireball2 {
     top: 70px;
 }
+
 .cannon3 {
     top: 315px;
 }
@@ -216,9 +268,20 @@ body {
 .game-over {
     font-size: 32px;
     font-weight: bold;
-    color: red;
     text-align: center;
-    margin-top: 10px;
+    background-color: #ffffff;
+    width: fit-content;
+    margin: 10px auto 0;
+    padding: 10px 24px;
+    border-radius: 8px;
+}
+
+.game-over.win {
+    color: rgb(0, 100, 0);
+}
+
+.game-over.lose {
+    color: rgb(179, 0, 0);
 }
 
 #playAgainBtn {
@@ -229,6 +292,9 @@ body {
     font-weight: bold;
     cursor: pointer;
     background-color: #5d5db7;
+    color: white;
+    border: none;
+    border-radius: 6px;
 }
 
 .hidden {
