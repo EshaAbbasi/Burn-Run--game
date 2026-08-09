@@ -37,6 +37,7 @@ const gameContainer = document.getElementById('gameContainer');
 const scoreCont = document.getElementById('scoreCont');
 const gameOverMsg = document.getElementById('gameOverMsg');
 const playAgainBtn = document.getElementById('playAgainBtn');
+const contentCard = document.querySelector('.content-card');
 const introScreen = document.querySelector('.introScreen');
 const introStep = document.querySelector('.introStep');
 const instructions = document.querySelector('.instructions');
@@ -91,16 +92,14 @@ function randomizeTop(el) {
 function startGame(level) {
     difficulty = level;
 
-    introScreen.hidden = true;
-    introStep.hidden = true;
-    instructions.hidden = true;
+    contentCard.hidden = true;
     gameContainer.hidden = false;
 
     fireballIds.forEach(id => {
         const fireball = document.getElementById(id);
         fireball.classList.add('fireballAni');
         fireball.style.animationDuration = diffSpeeds[difficulty] + 's';
-
+//picks random value for the top position of the fireball within the play area
         randomizeTop(fireball);
         fireball.addEventListener('animationiteration', () => randomizeTop(fireball));
     });
@@ -167,7 +166,7 @@ function beginGameLoop() {
 
           
             const hit = hitBox.left < ballRect.right && hitBox.right > ballRect.left &&
-                        hitBox.top < ballRect.bottom && hitBox.bottom > ballRect.top;
+                       hitBox.top < ballRect.bottom && hitBox.bottom > ballRect.top;
 
             const near = charRect.left < ballRect.right && charRect.right > ballRect.left;
 
@@ -208,14 +207,16 @@ function endGame(won) {
         document.getElementById(id).classList.remove('fireballAni');
     });
 
+    gameOverMsg.classList.remove('win', 'lose');
+
     if (won) {
         gameOverMsg.textContent = `You won the game, ${nameplay}!`;
-        gameOverMsg.style.color = 'green';
+        gameOverMsg.classList.add('win');
          musicbg.play();
             musicover.pause();
     } else {
         gameOverMsg.textContent = `You lose the game, ${nameplay}!`;
-        gameOverMsg.style.color = 'red';
+        gameOverMsg.classList.add('lose');
          musicbg.pause();
             musicover.play();
         
@@ -225,10 +226,12 @@ function endGame(won) {
 
     playAgainBtn.classList.remove('hidden');
     playAgainBtn.hidden = false;
+
+    gameOverMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 function updateScore(score) {
-    scoreCont.textContent = 'your score is ' + score;
+    scoreCont.textContent = ' score: ' + score;
 }
 
 function restart() {
@@ -240,6 +243,7 @@ function restart() {
     updateScore(score);
 
     gameOverMsg.textContent = '';
+    gameOverMsg.classList.remove('win', 'lose');
     playAgainBtn.classList.add('hidden');
     character.style.top = '200px';
 
