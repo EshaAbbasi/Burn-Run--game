@@ -8,6 +8,12 @@ html, body {
     min-height: 100%;
 }
 
+html {
+    /* Stops iOS from inflating text in landscape */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
 body {
     background-image: url("bgone.jpg");
     background-repeat: no-repeat;
@@ -15,7 +21,20 @@ body {
     background-position: center;
     background-attachment: fixed;
     min-height: 100vh;
-    padding: 20px;
+    min-height: 100dvh;
+    /* Respect notches / rounded corners on iPhone and iPad */
+    padding: max(20px, env(safe-area-inset-top))
+             max(20px, env(safe-area-inset-right))
+             max(20px, env(safe-area-inset-bottom))
+             max(20px, env(safe-area-inset-left));
+}
+
+/* background-attachment: fixed is unreliable on iOS Safari / touch
+   devices (it causes zoomed or jumpy backgrounds), so use scroll there. */
+@media (hover: none) and (pointer: coarse) {
+    body {
+        background-attachment: scroll;
+    }
 }
 
 [hidden] {
@@ -23,13 +42,13 @@ body {
 }
 
 /* One solid card holds ALL the intro text, so it never sits directly
-   on top of bgone.jpg and its contrast is guaranteed, not dependent
-   on whatever part of the photo is behind it. */
+   on top of bgone.jpg and its contrast is guaranteed. */
 .content-card {
     background-color: #ffffff;
+    width: 100%;
     max-width: 700px;
     margin: 20px auto;
-    padding: 25px 20px;
+    padding: clamp(16px, 4vw, 25px) clamp(14px, 4vw, 20px);
     border-radius: 12px;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
 }
@@ -42,21 +61,23 @@ body {
 
 .introScreen h1 {
     color: rgb(179, 3, 3);
-    font-size: 50px;
+    font-size: clamp(30px, 8vw, 50px);
     font-family: 'Sekuya', Courier, monospace;
     text-align: center;
+    line-height: 1.15;
+    overflow-wrap: anywhere;
 }
 
 .introStep {
     color: rgb(0, 0, 210);
-    font-size: 30px;
+    font-size: clamp(20px, 5vw, 30px);
     text-align: center;
     margin-top: 15px;
 }
 
 .instructions {
     color: rgb(2, 56, 14);
-    font-size: 24px;
+    font-size: clamp(16px, 3.8vw, 24px);
     text-align: center;
     font-style: italic;
     margin-top: 15px;
@@ -71,16 +92,19 @@ body {
     text-align: left;
     display: inline-block;
     margin-top: 10px;
+    padding-left: 1.2em;
+    max-width: 100%;
 }
 
 #startButton {
     background-color: rgb(5, 35, 90);
     color: white;
-    font-size: 20px;
+    font-size: clamp(18px, 4.5vw, 20px);
     font-weight: bold;
     display: block;
     margin: 20px auto 0;
-    padding: 10px 20px;
+    padding: 12px 24px;
+    min-height: 44px;              /* comfortable touch target */
     border: none;
     border-radius: 6px;
     cursor: pointer;
@@ -89,8 +113,9 @@ body {
 .message {
     display: block;
     width: fit-content;
+    max-width: 100%;
     text-align: center;
-    font-size: 22px;
+    font-size: clamp(17px, 4.5vw, 22px);
     font-weight: bold;
     color: rgb(139, 0, 0);
     margin: 10px auto 0;
@@ -114,7 +139,7 @@ body {
 
 .input-container label,
 .levels label {
-    font-size: 20px;
+    font-size: clamp(17px, 4.5vw, 20px);
     font-weight: bold;
     color: rgb(5, 35, 90);
 }
@@ -125,12 +150,13 @@ body {
 }
 
 #playerName {
-    padding: 9px 13px;
-    font-size: 18px;
+    padding: 10px 13px;
+    font-size: 18px;               /* 16px+ prevents iOS auto-zoom on focus */
     border: 2px solid #05235a;
     border-radius: 7px;
     width: 240px;
-    max-width: 80vw;
+    max-width: 100%;
+    min-height: 44px;
     text-align: center;
 }
 
@@ -139,31 +165,33 @@ body {
     color: white;
     font-size: 18px;
     font-weight: bold;
-    padding: 7px 22px;
+    padding: 9px 24px;
+    min-height: 44px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
 }
 
 #level1Button {
-    font-size: 20px;
+    font-size: clamp(18px, 4.5vw, 20px);
     font-weight: bold;
     background-color: green;
     color: white;
-    padding: 7px 22px;
+    padding: 9px 24px;
+    min-height: 44px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
 }
 
 #level2Button {
-    font-size: 20px;
+    font-size: clamp(18px, 4.5vw, 20px);
     font-weight: bold;
-    /* Darkened from pure red (#ff0000) so white text clears 4.5:1
-       contrast at normal text size, not just the 3:1 large-text minimum. */
+    /* Darkened from pure red so white text clears 4.5:1 contrast */
     background-color: rgb(179, 0, 0);
     color: white;
-    padding: 7px 22px;
+    padding: 9px 24px;
+    min-height: 44px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
@@ -180,7 +208,7 @@ body {
     background-color: rgb(5, 35, 90);
     color: #ffffff;
     font-weight: bold;
-    font-size: 22px;
+    font-size: clamp(17px, 4.5vw, 22px);
     padding: 8px 20px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
@@ -188,40 +216,49 @@ body {
     display: inline-block;
 }
 
+/* ---------------------------------------------------------------
+   PLAY AREA
+   The original was a fixed 800x400 box with everything positioned
+   in pixels. It now keeps the same 2:1 shape at any width, and all
+   child sizes/positions are percentages of that box (the old px
+   values divided by 800 wide / 400 tall), so the whole scene scales
+   together on phones, iPads and desktops.
+   --------------------------------------------------------------- */
 .play-area {
     position: relative;
-    width: 800px;
-    max-width: 90vw;
-    height: 400px;
+    width: min(800px, 100%, 150vh);   /* 150vh keeps it on-screen in landscape phones */
+    aspect-ratio: 2 / 1;
+    height: auto;
     margin: 20px auto;
     border: 2px solid black;
     overflow: hidden;
     background-color: white;
+    touch-action: manipulation;
 }
 
 .character {
     position: absolute;
-    top: 200px;
+    top: 50%;            /* was 200px */
     left: auto;
-    height: 90px;
-    width: 120px;
+    height: 22.5%;       /* was 90px  */
+    width: 15%;          /* was 120px */
 }
 
 .cannon {
     position: absolute;
-    top: 230px;
-    right: 2px;
-    height: 80px;
-    width: 120px;
+    top: 57.5%;          /* was 230px */
+    right: 0.25%;        /* was 2px   */
+    height: 20%;         /* was 80px  */
+    width: 15%;          /* was 120px */
 }
 
 .fireball {
     mix-blend-mode: screen;
     position: absolute;
-    top: 210px;
-    right: 210px;
-    height: 18px;
-    width: 90px;
+    top: 52.5%;          /* was 210px */
+    right: 26.25%;       /* was 210px */
+    height: 4.5%;        /* was 18px  */
+    width: 11.25%;       /* was 90px  */
 }
 
 .fireballAni {
@@ -229,48 +266,49 @@ body {
 }
 
 @keyframes fireballMove {
-    from { right: 100px; }
+    from { right: 12.5%; }   /* was 100px */
     to   { right: 100%; }
 }
 
 .cannon2 {
-    top: 70px;
+    top: 17.5%;          /* was 70px  */
 }
 
 .fireball2 {
-    top: 70px;
+    top: 17.5%;          /* was 70px  */
 }
 
 .cannon3 {
-    top: 315px;
+    top: 78.75%;         /* was 315px */
 }
 
 .fireball3 {
-    top: 350px;
+    top: 87.5%;          /* was 350px */
 }
 
 .cannon4 {
-    top: 1px;
+    top: 0.25%;          /* was 1px   */
 }
 
 .fireball4 {
-    top: 20px;
+    top: 5%;             /* was 20px  */
 }
 
 .cannon5 {
-    top: 150px;
+    top: 37.5%;          /* was 150px */
 }
 
 .fireball5 {
-    top: 320px;
+    top: 80%;            /* was 320px */
 }
 
 .game-over {
-    font-size: 32px;
+    font-size: clamp(22px, 6vw, 32px);
     font-weight: bold;
     text-align: center;
     background-color: #ffffff;
     width: fit-content;
+    max-width: 100%;
     margin: 10px auto 0;
     padding: 10px 24px;
     border-radius: 8px;
@@ -287,7 +325,8 @@ body {
 #playAgainBtn {
     display: block;
     margin: 15px auto;
-    padding: 8px 18px;
+    padding: 10px 22px;
+    min-height: 44px;
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
@@ -299,4 +338,82 @@ body {
 
 .hidden {
     display: none !important;
+}
+
+/* ---------------------------------------------------------------
+   BREAKPOINTS
+   --------------------------------------------------------------- */
+
+/* Phones (portrait) */
+@media (max-width: 600px) {
+    body {
+        padding: max(12px, env(safe-area-inset-top))
+                 max(12px, env(safe-area-inset-right))
+                 max(12px, env(safe-area-inset-bottom))
+                 max(12px, env(safe-area-inset-left));
+    }
+
+    .content-card {
+        margin: 10px auto;
+    }
+
+    .levels {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #level1Button,
+    #level2Button,
+    #startButton,
+    #submitNameButton {
+        width: 100%;
+        max-width: 280px;
+    }
+
+    .play-area {
+        margin: 12px auto;
+    }
+}
+
+/* Tablets / iPad (portrait and landscape) */
+@media (min-width: 601px) and (max-width: 1024px) {
+    .content-card {
+        max-width: 640px;
+    }
+
+    .play-area {
+        width: min(800px, 100%);
+    }
+}
+
+/* Desktop and larger */
+@media (min-width: 1025px) {
+    .content-card {
+        max-width: 700px;
+    }
+}
+
+/* Short landscape screens (phones turned sideways) */
+@media (max-height: 500px) and (orientation: landscape) {
+    body {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    .content-card {
+        margin: 8px auto;
+        padding: 12px 16px;
+    }
+
+    .play-area {
+        margin: 8px auto;
+        width: min(800px, 100%, 150vh);
+    }
+}
+
+/* Respect users who turn animations off */
+@media (prefers-reduced-motion: reduce) {
+    .fireballAni {
+        animation-duration: 4s;
+    }
 }
