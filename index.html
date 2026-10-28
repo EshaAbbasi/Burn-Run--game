@@ -2,71 +2,86 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-   
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Burn & Run</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Burn &amp; Run</title>
     <link rel="stylesheet" href="style.css" />
     <script defer src="app.js"></script>
 </head>
 <body>
 
-    <div class="content-card">
+    <main class="content-card">
         <div class="introScreen">
-            <h1>Burn & Run</h1>
+            <h1>Burn &amp; Run</h1>
         </div>
         <div class="introStep">
             <h2>A simple game where you burn calories and run!</h2>
         </div>
         <div class="instructions">
-            <p>Instructions:</p>
+            <p>Instructions</p>
             <ul>
-                <li>Click the "Start Game" button to begin.</li>
+                <li>Click "Start Game" to begin.</li>
                 <li>Enter your name when prompted.</li>
                 <li>Select a difficulty level: Easy or Hard.</li>
-                <li>Run and escape fireball to win!</li>
+                <li>Move up and down to dodge the fireballs: arrow keys on a keyboard, or drag in the arena / use the buttons on a touch screen.</li>
+                <li>Survive and score before the timer runs out to win!</li>
             </ul>
         </div>
 
-        <button id="startButton">Start Game</button>
+        <button id="startButton" type="button">Start Game</button>
 
-        <p id="message" class="message"></p>
+        <p id="message" class="message" aria-live="polite"></p>
 
         <div class="input-container" id="inputContainer" hidden>
-            <label for="playerName">Enter your name:</label>
-            <input type="text" id="playerName" placeholder="Your Name">
-            <button id="submitNameButton">Submit</button>
+            <label for="playerName">Enter your name</label>
+            <input type="text" id="playerName" placeholder="Your name" maxlength="20" autocomplete="nickname">
+            <button id="submitNameButton" type="button">Submit</button>
         </div>
 
         <div class="levels" id="levels" hidden>
-            <label for="levelSelect">Select Difficulty Level:</label>
-            <button id="level1Button">Easy</button>
-            <button id="level2Button">Hard</button>
+            <p class="levels-label">Select difficulty</p>
+            <button id="level1Button" type="button">Easy</button>
+            <button id="level2Button" type="button">Hard</button>
         </div>
-    </div>
+    </main>
 
     <div class="game-container" id="gameContainer" hidden>
-        <div class="score" id="scoreCont">Score:</div>
+        <div class="hud">
+            <span id="scoreCont">Score 0</span>
+            <span class="hud-right">
+                <span id="timerCont">60s</span>
+                <button id="soundBtn" class="link-btn" type="button">Sound on</button>
+            </span>
+        </div>
 
-      <div class="play-area" id="playArea">
-    <img src="character.png" style="mix-blend-mode: multiply;" class="character" id="character" alt="character">
+        <div class="play-area" id="playArea">
+            <img src="character.png" class="character" id="character" alt="Player" draggable="false">
 
-    <img src="canon1.jpg" style="mix-blend-mode: multiply;" class="cannon" id="cannon" alt="cannon">
-    <img src="fb.jpg" style="mix-blend-mode: multiply;" class="fireball" id="fireball" alt="fireball">
+            <img src="canon1.jpg" class="cannon" id="cannon" alt="" draggable="false">
+            <img src="fb.jpg" class="fireball" id="fireball" alt="" draggable="false">
 
-    <img src="canon1.jpg" style="mix-blend-mode: multiply;" class="cannon cannon2" id="cannon2" alt="cannon">
-    <img src="fb.jpg" style="mix-blend-mode: multiply;" class="fireball fireball2" id="fireball2" alt="fireball">
+            <img src="canon1.jpg" class="cannon cannon2" id="cannon2" alt="" draggable="false">
+            <img src="fb.jpg" class="fireball fireball2" id="fireball2" alt="" draggable="false">
 
-    <img src="canon1.jpg" style="mix-blend-mode: multiply;" class="cannon cannon3" id="cannon3" alt="cannon">
-    <img src="fb.jpg" style="mix-blend-mode: multiply;" class="fireball fireball3" id="fireball3" alt="fireball">
+            <img src="canon1.jpg" class="cannon cannon3" id="cannon3" alt="" draggable="false">
+            <img src="fb.jpg" class="fireball fireball3" id="fireball3" alt="" draggable="false">
 
-    <img src="canon1.jpg" style="mix-blend-mode: multiply;" class="cannon cannon4" id="cannon4" alt="cannon">
-    <img src="fb.jpg" style="mix-blend-mode: multiply;" class="fireball fireball4" id="fireball4" alt="fireball">
+            <img src="canon1.jpg" class="cannon cannon4" id="cannon4" alt="" draggable="false">
+            <img src="fb.jpg" class="fireball fireball4" id="fireball4" alt="" draggable="false">
 
-    <img src="canon1.jpg" style="mix-blend-mode: multiply;" class="cannon cannon5" id="cannon5" alt="cannon">
-    <img src="fb.jpg" style="mix-blend-mode: multiply;" class="fireball fireball5" id="fireball5" alt="fireball">
-</div>
-        <div class="game-over" id="gameOverMsg"></div>
-        <button id="playAgainBtn" class="hidden">Play Again</button>
+            <img src="canon1.jpg" class="cannon cannon5" id="cannon5" alt="" draggable="false">
+            <img src="fb.jpg" class="fireball fireball5" id="fireball5" alt="" draggable="false">
+
+            <div class="game-over" id="gameOver" hidden>
+                <p id="gameOverMsg"></p>
+                <button id="playAgainBtn" type="button">Play again</button>
+            </div>
+        </div>
+
+        <!-- Shown on touch devices only (see CSS) -->
+        <div class="controls">
+            <button id="upBtn" type="button" aria-label="Move up">&#9650;</button>
+            <button id="downBtn" type="button" aria-label="Move down">&#9660;</button>
+        </div>
     </div>
 
 </body>
