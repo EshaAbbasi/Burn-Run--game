@@ -4,261 +4,300 @@
     box-sizing: border-box;
 }
 
-html, body {
-    min-height: 100%;
+:root {
+    --ink: #161616;
+    --muted: #6a6a66;
+    --line: #dcdcd6;
+    --bg: #f6f5f1;
+    --card: #ffffff;
+    --accent: #c93a18;
+    --win: #1d7a3a;
 }
 
 html {
-    /* Stops iOS from inflating text in landscape */
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
 }
 
 body {
-    background-image: url("bgone.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.4;
+    color: var(--ink);
+    background: var(--bg);
     min-height: 100vh;
     min-height: 100dvh;
-    /* Respect notches / rounded corners on iPhone and iPad */
-    padding: max(20px, env(safe-area-inset-top))
-             max(20px, env(safe-area-inset-right))
-             max(20px, env(safe-area-inset-bottom))
-             max(20px, env(safe-area-inset-left));
-}
-
-/* background-attachment: fixed is unreliable on iOS Safari / touch
-   devices (it causes zoomed or jumpy backgrounds), so use scroll there. */
-@media (hover: none) and (pointer: coarse) {
-    body {
-        background-attachment: scroll;
-    }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* keep clear of notches / rounded corners */
+    padding: max(16px, env(safe-area-inset-top))
+             max(16px, env(safe-area-inset-right))
+             max(16px, env(safe-area-inset-bottom))
+             max(16px, env(safe-area-inset-left));
 }
 
 [hidden] {
     display: none !important;
 }
 
-/* One solid card holds ALL the intro text, so it never sits directly
-   on top of bgone.jpg and its contrast is guaranteed. */
-.content-card {
-    background-color: #ffffff;
-    width: 100%;
-    max-width: 700px;
-    margin: 20px auto;
-    padding: clamp(16px, 4vw, 25px) clamp(14px, 4vw, 20px);
-    border-radius: 12px;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
-}
+/* ---------- Intro card ---------- */
 
-.introScreen {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.content-card {
+    width: 100%;
+    max-width: 560px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: clamp(24px, 6vw, 44px) clamp(18px, 5vw, 40px);
+    text-align: center;
 }
 
 .introScreen h1 {
-    color: rgb(179, 3, 3);
-    font-size: clamp(30px, 8vw, 50px);
-    font-family: 'Sekuya', Courier, monospace;
-    text-align: center;
-    line-height: 1.15;
-    overflow-wrap: anywhere;
+    font-size: clamp(34px, 10vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    font-weight: 800;
 }
 
-.introStep {
-    color: rgb(0, 0, 210);
-    font-size: clamp(20px, 5vw, 30px);
-    text-align: center;
-    margin-top: 15px;
+.introScreen h1::after {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 4px;
+    margin: 16px auto 0;
+    border-radius: 2px;
+    background: var(--accent);
+}
+
+.introStep h2 {
+    margin-top: 14px;
+    font-size: clamp(16px, 4.2vw, 19px);
+    font-weight: 400;
+    color: var(--muted);
 }
 
 .instructions {
-    color: rgb(2, 56, 14);
-    font-size: clamp(16px, 3.8vw, 24px);
-    text-align: center;
-    font-style: italic;
-    margin-top: 15px;
+    margin-top: 28px;
+    text-align: left;
 }
 
 .instructions p {
-    color: black;
-    font-weight: bold;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
 }
 
 .instructions ul {
-    text-align: left;
-    display: inline-block;
-    margin-top: 10px;
-    padding-left: 1.2em;
-    max-width: 100%;
+    margin-top: 8px;
+    padding-left: 1.1em;
+    font-size: 15px;
 }
 
-#startButton {
-    background-color: rgb(5, 35, 90);
-    color: white;
-    font-size: clamp(18px, 4.5vw, 20px);
-    font-weight: bold;
-    display: block;
-    margin: 20px auto 0;
-    padding: 12px 24px;
-    min-height: 44px;              /* comfortable touch target */
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
+.instructions li {
+    margin-top: 6px;
 }
 
 .message {
+    min-height: 1.4em;
+    margin-top: 18px;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+/* ---------- Buttons & inputs ---------- */
+
+button {
+    font: inherit;
+    font-weight: 600;
+    min-height: 48px;
+    padding: 0 28px;
+    border-radius: 999px;
+    border: 1.5px solid var(--ink);
+    background: var(--ink);
+    color: #fff;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+button:focus-visible,
+input:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+}
+
+#startButton {
     display: block;
-    width: fit-content;
-    max-width: 100%;
-    text-align: center;
-    font-size: clamp(17px, 4.5vw, 22px);
-    font-weight: bold;
-    color: rgb(139, 0, 0);
-    margin: 10px auto 0;
+    margin: 28px auto 0;
+}
+
+#level1Button,
+#level2Button {
+    flex: 1 1 130px;
+    max-width: 180px;
+    background: transparent;
+    color: var(--ink);
+}
+
+@media (hover: hover) {
+    button:hover {
+        background: #2e2e2e;
+    }
+
+    #level1Button:hover,
+    #level2Button:hover,
+    .controls button:hover {
+        background: var(--ink);
+        color: #fff;
+    }
+}
+
+.link-btn {
+    min-height: 44px;
+    padding: 0 4px;
+    border: none;
+    background: none;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+@media (hover: hover) {
+    .link-btn:hover {
+        background: none;
+        color: var(--ink);
+    }
 }
 
 .input-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
-    margin-top: 20px;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.input-container label,
+.levels-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+#playerName {
+    width: min(280px, 100%);
+    min-height: 48px;
+    padding: 0 14px;
+    font: inherit;
+    font-size: 18px;               /* 16px+ stops iOS zooming on focus */
+    text-align: center;
+    color: var(--ink);
+    background: #fff;
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
 }
 
 .levels {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 9px 20px;
-    margin-top: 20px;
+    gap: 12px;
+    margin-top: 24px;
 }
 
-.input-container label,
-.levels label {
-    font-size: clamp(17px, 4.5vw, 20px);
-    font-weight: bold;
-    color: rgb(5, 35, 90);
-}
-
-.levels label {
+.levels-label {
     flex-basis: 100%;
-    text-align: center;
 }
 
-#playerName {
-    padding: 10px 13px;
-    font-size: 18px;               /* 16px+ prevents iOS auto-zoom on focus */
-    border: 2px solid #05235a;
-    border-radius: 7px;
-    width: 240px;
-    max-width: 100%;
-    min-height: 44px;
-    text-align: center;
-}
-
-#submitNameButton {
-    background-color: #05235a;
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-    padding: 9px 24px;
-    min-height: 44px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-#level1Button {
-    font-size: clamp(18px, 4.5vw, 20px);
-    font-weight: bold;
-    background-color: green;
-    color: white;
-    padding: 9px 24px;
-    min-height: 44px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-#level2Button {
-    font-size: clamp(18px, 4.5vw, 20px);
-    font-weight: bold;
-    /* Darkened from pure red so white text clears 4.5:1 contrast */
-    background-color: rgb(179, 0, 0);
-    color: white;
-    padding: 9px 24px;
-    min-height: 44px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-}
+/* ---------- Game ---------- */
 
 .game-container {
+    width: 100%;
+    max-width: 800px;
     display: flex;
     flex-direction: column;
+    gap: 12px;
+}
+
+.hud {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    margin-top: 15px;
+    font-size: clamp(16px, 4.5vw, 20px);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
 }
 
-.score {
-    background-color: rgb(5, 35, 90);
-    color: #ffffff;
-    font-weight: bold;
-    font-size: clamp(17px, 4.5vw, 22px);
-    padding: 8px 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
-    margin-bottom: 10px;
-    display: inline-block;
+.hud-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
 }
 
-/* ---------------------------------------------------------------
-   PLAY AREA
-   The original was a fixed 800x400 box with everything positioned
-   in pixels. It now keeps the same 2:1 shape at any width, and all
-   child sizes/positions are percentages of that box (the old px
-   values divided by 800 wide / 400 tall), so the whole scene scales
-   together on phones, iPads and desktops.
-   --------------------------------------------------------------- */
+#timerCont {
+    font-weight: 600;
+    color: var(--muted);
+}
+
+/* The arena keeps a fixed shape and every sprite is sized from the
+   arena itself (cqh = 1% of its height), so the scene scales as one
+   piece on phones, iPads and desktops without squashing the images. */
 .play-area {
     position: relative;
-    width: min(800px, 100%, 150vh);   /* 150vh keeps it on-screen in landscape phones */
+    width: 100%;
     aspect-ratio: 2 / 1;
-    height: auto;
-    margin: 20px auto;
-    border: 2px solid black;
+    container-type: size;
     overflow: hidden;
-    background-color: white;
-    touch-action: manipulation;
+    background: #fff;
+    border: 1.5px solid var(--ink);
+    border-radius: 16px;
+    touch-action: none;            /* dragging moves the player, not the page */
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: ns-resize;
+}
+
+.play-area img {
+    position: absolute;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
 }
 
 .character {
-    position: absolute;
-    top: 50%;            /* was 200px */
-    left: auto;
-    height: 22.5%;       /* was 90px  */
-    width: 15%;          /* was 120px */
+    top: 50%;
+    left: 1%;
+    height: 22.5%;
+    width: 15%;                    /* fallback */
+    width: 30cqh;
 }
 
 .cannon {
-    position: absolute;
-    top: 57.5%;          /* was 230px */
-    right: 0.25%;        /* was 2px   */
-    height: 20%;         /* was 80px  */
-    width: 15%;          /* was 120px */
+    top: 57.5%;
+    right: 0.25%;
+    right: 0.5cqh;
+    height: 20%;
+    width: 15%;                    /* fallback */
+    width: 30cqh;
 }
 
 .fireball {
-    mix-blend-mode: screen;
-    position: absolute;
-    top: 52.5%;          /* was 210px */
-    right: 26.25%;       /* was 210px */
-    height: 4.5%;        /* was 18px  */
-    width: 11.25%;       /* was 90px  */
+    top: 52.5%;
+    right: 26.25%;
+    right: 52.5cqh;
+    height: 4.5%;
+    width: 11.25%;                 /* fallback */
+    width: 22.5cqh;
 }
 
 .fireballAni {
@@ -266,154 +305,99 @@ body {
 }
 
 @keyframes fireballMove {
-    from { right: 12.5%; }   /* was 100px */
+    from { right: 25cqh; }
     to   { right: 100%; }
 }
 
-.cannon2 {
-    top: 17.5%;          /* was 70px  */
+@supports not (width: 1cqh) {
+    @keyframes fireballMove {
+        from { right: 12.5%; }
+        to   { right: 100%; }
+    }
 }
 
-.fireball2 {
-    top: 17.5%;          /* was 70px  */
-}
-
-.cannon3 {
-    top: 78.75%;         /* was 315px */
-}
-
-.fireball3 {
-    top: 87.5%;          /* was 350px */
-}
-
-.cannon4 {
-    top: 0.25%;          /* was 1px   */
-}
-
-.fireball4 {
-    top: 5%;             /* was 20px  */
-}
-
-.cannon5 {
-    top: 37.5%;          /* was 150px */
-}
-
-.fireball5 {
-    top: 80%;            /* was 320px */
-}
+.cannon2   { top: 17.5%; }
+.fireball2 { top: 17.5%; }
+.cannon3   { top: 78.75%; }
+.fireball3 { top: 87.5%; }
+.cannon4   { top: 0.25%; }
+.fireball4 { top: 5%; }
+.cannon5   { top: 37.5%; }
+.fireball5 { top: 80%; }
 
 .game-over {
-    font-size: clamp(22px, 6vw, 32px);
-    font-weight: bold;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 16px;
     text-align: center;
-    background-color: #ffffff;
-    width: fit-content;
-    max-width: 100%;
-    margin: 10px auto 0;
-    padding: 10px 24px;
-    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.92);
+    cursor: default;
 }
 
-.game-over.win {
-    color: rgb(0, 100, 0);
+#gameOverMsg {
+    font-size: clamp(20px, 5.5vw, 32px);
+    font-weight: 800;
 }
 
-.game-over.lose {
-    color: rgb(179, 0, 0);
+#gameOverMsg.win  { color: var(--win); }
+#gameOverMsg.lose { color: var(--accent); }
+
+/* On-screen controls: touch devices only */
+.controls {
+    display: none;
+    gap: 12px;
 }
 
-#playAgainBtn {
-    display: block;
-    margin: 15px auto;
-    padding: 10px 22px;
-    min-height: 44px;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    background-color: #5d5db7;
-    color: white;
-    border: none;
-    border-radius: 6px;
+@media (pointer: coarse) {
+    .controls {
+        display: flex;
+    }
 }
 
-.hidden {
-    display: none !important;
+.controls button {
+    flex: 1;
+    min-height: 64px;
+    font-size: 24px;
+    border-radius: 16px;
+    background: transparent;
+    color: var(--ink);
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
 }
 
-/* ---------------------------------------------------------------
-   BREAKPOINTS
-   --------------------------------------------------------------- */
+/* ---------- Responsive ---------- */
 
-/* Phones (portrait) */
-@media (max-width: 600px) {
+/* Phones in portrait: a taller arena so it isn't a thin strip */
+@media (max-width: 600px) and (orientation: portrait) {
+    .play-area {
+        aspect-ratio: 4 / 3;
+    }
+}
+
+/* Phones turned sideways: keep everything on one screen */
+@media (max-height: 520px) and (orientation: landscape) {
     body {
-        padding: max(12px, env(safe-area-inset-top))
-                 max(12px, env(safe-area-inset-right))
-                 max(12px, env(safe-area-inset-bottom))
-                 max(12px, env(safe-area-inset-left));
+        justify-content: flex-start;
+        padding-top: max(8px, env(safe-area-inset-top));
+        padding-bottom: max(8px, env(safe-area-inset-bottom));
     }
 
     .content-card {
-        margin: 10px auto;
+        padding: 18px;
     }
 
-    .levels {
-        flex-direction: column;
-        align-items: center;
+    .game-container {
+        max-width: min(800px, 150vh);
+        gap: 6px;
     }
 
-    #level1Button,
-    #level2Button,
-    #startButton,
-    #submitNameButton {
-        width: 100%;
-        max-width: 280px;
-    }
-
-    .play-area {
-        margin: 12px auto;
-    }
-}
-
-/* Tablets / iPad (portrait and landscape) */
-@media (min-width: 601px) and (max-width: 1024px) {
-    .content-card {
-        max-width: 640px;
-    }
-
-    .play-area {
-        width: min(800px, 100%);
-    }
-}
-
-/* Desktop and larger */
-@media (min-width: 1025px) {
-    .content-card {
-        max-width: 700px;
-    }
-}
-
-/* Short landscape screens (phones turned sideways) */
-@media (max-height: 500px) and (orientation: landscape) {
-    body {
-        padding-top: 8px;
-        padding-bottom: 8px;
-    }
-
-    .content-card {
-        margin: 8px auto;
-        padding: 12px 16px;
-    }
-
-    .play-area {
-        margin: 8px auto;
-        width: min(800px, 100%, 150vh);
-    }
-}
-
-/* Respect users who turn animations off */
-@media (prefers-reduced-motion: reduce) {
-    .fireballAni {
-        animation-duration: 4s;
+    .controls {
+        display: none;             /* drag in the arena instead */
     }
 }
