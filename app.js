@@ -1,30 +1,34 @@
-//varaibles
+// ---------- state ----------
 let score = 0;
 let cross = true;
 let gameLoop = null;
 let timerInterval = null;
+let holdInterval = null;
 let nameplay = '';
 let difficulty = null;
-let timeLeft = 10;
+let timeLeft = 60;
+let running = false;
+let muted = false;
+let drag = null;
 
-const diffSpeeds = {
-    easy: 2,
-    hard: 1.5
-};
-
-const winScores = {
-    easy: 15,
-    hard: 20
-};
-
+const GAME_SECONDS = 60;
 const msgs = 1500;
-musicbg=new Audio('music.mp3');
-musicover=new Audio('over.wav');
 
-    setTimeout(() => {
-       musicbg.play();
-    }, 1000);
+const diffSpeeds = { easy: 2, hard: 1.5 };
+const winScores = { easy: 15, hard: 20 };
 
+// ---------- audio ----------
+const musicbg = new Audio('music.mp3');
+musicbg.loop = true;
+const musicover = new Audio('over.wav');
+
+// Browsers (especially phones) only allow audio after a tap, so music
+// starts from the Start button instead of a timer.
+function startMusic() {
+    if (!muted) musicbg.play().catch(() => {});
+}
+
+// ---------- elements ----------
 const startButton = document.getElementById('startButton');
 const message = document.getElementById('message');
 const inputContainer = document.getElementById('inputContainer');
@@ -35,22 +39,29 @@ const level1Button = document.getElementById('level1Button');
 const level2Button = document.getElementById('level2Button');
 const gameContainer = document.getElementById('gameContainer');
 const scoreCont = document.getElementById('scoreCont');
+const timerCont = document.getElementById('timerCont');
+const soundBtn = document.getElementById('soundBtn');
+const playArea = document.getElementById('playArea');
+const character = document.getElementById('character');
+const gameOver = document.getElementById('gameOver');
 const gameOverMsg = document.getElementById('gameOverMsg');
 const playAgainBtn = document.getElementById('playAgainBtn');
+const upBtn = document.getElementById('upBtn');
+const downBtn = document.getElementById('downBtn');
 const contentCard = document.querySelector('.content-card');
-const introScreen = document.querySelector('.introScreen');
-const introStep = document.querySelector('.introStep');
-const instructions = document.querySelector('.instructions');
-
 
 const fireballIds = ['fireball', 'fireball2', 'fireball3', 'fireball4', 'fireball5'];
+const fireballs = fireballIds.map(id => document.getElementById(id));
 
+// ---------- intro flow ----------
 startButton.addEventListener('click', () => {
     startButton.hidden = true;
     inputContainer.hidden = false;
+    startMusic();
+    playerName.focus();
 });
 
-submitNameButton.addEventListener('click', () => {
+function submitName() {
     nameplay = playerName.value.trim();
     if (nameplay === '') {
         message.textContent = 'Please enter your name.';
@@ -63,14 +74,23 @@ submitNameButton.addEventListener('click', () => {
         message.textContent = '';
         levels.hidden = false;
     }, msgs);
+}
+
+submitNameButton.addEventListener('click', submitName);
+playerName.addEventListener('keydown', e => {
+    if (e.key === 'Enter') submitName();
 });
 
 level1Button.addEventListener('click', () => begin(nameplay, 'easy'));
 level2Button.addEventListener('click', () => begin(nameplay, 'hard'));
+playAgainBtn.addEventListener('click', startRound);
 
-
-playAgainBtn.addEventListener('click', () => {
-    restart();
+soundBtn.addEventListener('click', () => {
+    muted = !muted;
+    musicbg.muted = muted;
+    musicover.muted = muted;
+    soundBtn.textContent = muted ? 'Sound off' : 'Sound on';
+    if (!muted && running) startMusic();
 });
 
 function begin(name, level) {
@@ -82,112 +102,175 @@ function begin(name, level) {
     }, msgs);
 }
 
+// ---------- fireballs ----------
+// Positions are percentages of the arena height, so they stay correct
+// on any screen size.
 function randomizeTop(el) {
-    const playArea = document.getElementById('playArea');
-    const maxTop = playArea.clientHeight - el.offsetHeight;
-    const newTop = Math.floor(Math.random() * maxTop);
-    el.style.top = newTop + 'px';
+    const h = playArea.clientHeight;
+    if (!h) return;
+    const maxPct = 100 - (el.offsetHeight / h) * 100;
+    el.style.top = (Math.random() * maxPct) + '%';
 }
 
+fireballs.forEach(fb => {
+    fb.addEventListener('animationiteration', () => randomizeTop(fb));
+});
+
+// ---------- starting a round ----------
 function startGame(level) {
     difficulty = level;
-
     contentCard.hidden = true;
     gameContainer.hidden = false;
+    startRound();
+}
 
-    fireballIds.forEach(id => {
-        const fireball = document.getElementById(id);
-        fireball.classList.add('fireballAni');
-        fireball.style.animationDuration = diffSpeeds[difficulty] + 's';
-//picks random value for the top position of the fireball within the play area
-        randomizeTop(fireball);
-        fireball.addEventListener('animationiteration', () => randomizeTop(fireball));
+function startRound() {
+    score = 0;
+    cross = true;
+    timeLeft = GAME_SECONDS;
+    updateScore();
+    updateTimer();
+
+    gameOver.hidden = true;
+    gameOverMsg.textContent = '';
+    gameOverMsg.classList.remove('win', 'lose');
+
+    character.style.top = '';          // back to the CSS start position
+
+    fireballs.forEach(fb => {
+        fb.classList.remove('fireballAni');
+        void fb.offsetWidth;           // restart the animation
+        fb.style.animationPlayState = 'running';
+        fb.style.animationDuration = diffSpeeds[difficulty] + 's';
+        randomizeTop(fb);
+        fb.classList.add('fireballAni');
     });
 
+    musicover.pause();
+    musicover.currentTime = 0;
+    startMusic();
+
+    running = true;
     document.addEventListener('keydown', handleKeyPress);
     beginGameLoop();
     startTimer();
 }
 
-function handleKeyPress(e) {
-    if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-        e.preventDefault();
-    }
-
-    const character = document.getElementById('character');
-    const playArea = document.getElementById('playArea');
-    const moveStep = 25;
-
-    const cy = parseInt(window.getComputedStyle(character, null).getPropertyValue('top'));
-    const maxTop = playArea.clientHeight - character.offsetHeight;
-
-    if (e.key === 'ArrowUp') {
-        character.style.top = Math.max(0, cy - moveStep) + 'px';
-    }
-    if (e.key === 'ArrowDown') {
-        character.style.top = Math.min(maxTop, cy + moveStep) + 'px';
-    }
+// ---------- controls: keyboard, drag, on-screen buttons ----------
+function setTop(px) {
+    const h = playArea.clientHeight;
+    const maxTop = h - character.offsetHeight;
+    const y = Math.min(maxTop, Math.max(0, px));
+    character.style.top = (y / h * 100) + '%';
 }
 
+function moveBy(dy) {
+    setTop(character.offsetTop + dy);
+}
+
+function handleKeyPress(e) {
+    const up = e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W';
+    const down = e.key === 'ArrowDown' || e.key === 's' || e.key === 'S';
+    if (!up && !down) return;
+
+    e.preventDefault();
+    const step = playArea.clientHeight * 0.0625;
+    moveBy(up ? -step : step);
+}
+
+// Drag anywhere in the arena (finger or mouse). The player follows the
+// movement, so your finger doesn't have to sit on top of the character.
+playArea.addEventListener('pointerdown', e => {
+    if (!running) return;
+    drag = { y: e.clientY, top: character.offsetTop };
+    playArea.setPointerCapture(e.pointerId);
+});
+
+playArea.addEventListener('pointermove', e => {
+    if (!drag || !running) return;
+    setTop(drag.top + (e.clientY - drag.y));
+});
+
+['pointerup', 'pointercancel'].forEach(type => {
+    playArea.addEventListener(type, () => { drag = null; });
+});
+
+// Hold-to-move buttons for touch screens
+function stopHold() {
+    clearInterval(holdInterval);
+    holdInterval = null;
+}
+
+function holdToMove(btn, dir) {
+    btn.addEventListener('pointerdown', e => {
+        e.preventDefault();
+        if (!running) return;
+        stopHold();
+        const tick = () => moveBy(dir * playArea.clientHeight * 0.018);
+        tick();
+        holdInterval = setInterval(tick, 16);
+    });
+    ['pointerup', 'pointerleave', 'pointercancel'].forEach(type => {
+        btn.addEventListener(type, stopHold);
+    });
+    btn.addEventListener('contextmenu', e => e.preventDefault());
+}
+
+holdToMove(upBtn, -1);
+holdToMove(downBtn, 1);
+
+// ---------- timer ----------
 function startTimer() {
-    timeLeft = 60;
+    clearInterval(timerInterval);
     timerInterval = setInterval(() => {
         timeLeft -= 1;
+        updateTimer();
         if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            if (score < winScores[difficulty]) {
-                endGame(false);
-            }
+            endGame(false);
         }
     }, 1000);
 }
 
+// ---------- game loop ----------
 function beginGameLoop() {
+    clearInterval(gameLoop);
     gameLoop = setInterval(() => {
-        const character = document.getElementById('character');
         const charRect = character.getBoundingClientRect();
 
-      
-        const CHAR_PAD_X = 30;
-        const CHAR_PAD_Y = 15;
+        // Forgiving hit box: shrink the sprite by a fraction of its size
+        // (not fixed pixels) so it still works when scaled down on phones.
+        const padX = charRect.width * 0.25;
+        const padY = charRect.height * (15 / 90);
         const hitBox = {
-            left: charRect.left + CHAR_PAD_X,
-            right: charRect.right - CHAR_PAD_X,
-            top: charRect.top + CHAR_PAD_Y,
-            bottom: charRect.bottom - CHAR_PAD_Y
+            left: charRect.left + padX,
+            right: charRect.right - padX,
+            top: charRect.top + padY,
+            bottom: charRect.bottom - padY
         };
 
         let anyHit = false;
         let anyNear = false;
 
-        fireballIds.forEach(id => {
-            const fireball = document.getElementById(id);
-            const ballRect = fireball.getBoundingClientRect();
+        fireballs.forEach(fb => {
+            const ballRect = fb.getBoundingClientRect();
 
-          
             const hit = hitBox.left < ballRect.right && hitBox.right > ballRect.left &&
-                       hitBox.top < ballRect.bottom && hitBox.bottom > ballRect.top;
+                        hitBox.top < ballRect.bottom && hitBox.bottom > ballRect.top;
 
             const near = charRect.left < ballRect.right && charRect.right > ballRect.left;
 
             if (hit) anyHit = true;
             if (near) anyNear = true;
-            
-           
         });
-
 
         if (anyHit) {
             endGame(false);
             return;
-              musicbg.play();
-           
         }
 
         if (anyNear && cross) {
-            musicbg.play();
             score += 1;
-            updateScore(score);
+            updateScore();
             cross = false;
             setTimeout(() => { cross = true; }, 1000);
 
@@ -195,71 +278,44 @@ function beginGameLoop() {
                 endGame(true);
             }
         }
-    }, 10);
+    }, 16);
 }
 
+// ---------- end of round ----------
 function endGame(won) {
+    if (!running) return;
+    running = false;
+
     clearInterval(gameLoop);
     clearInterval(timerInterval);
+    stopHold();
+    drag = null;
     document.removeEventListener('keydown', handleKeyPress);
 
-    fireballIds.forEach(id => {
-        document.getElementById(id).classList.remove('fireballAni');
-    });
+    // freeze the fireballs where they are
+    fireballs.forEach(fb => { fb.style.animationPlayState = 'paused'; });
 
     gameOverMsg.classList.remove('win', 'lose');
 
     if (won) {
         gameOverMsg.textContent = `You won the game, ${nameplay}!`;
         gameOverMsg.classList.add('win');
-         musicbg.play();
-            musicover.pause();
     } else {
         gameOverMsg.textContent = `You lose the game, ${nameplay}!`;
         gameOverMsg.classList.add('lose');
-         musicbg.pause();
-            musicover.play();
-        
-
+        musicbg.pause();
+        if (!muted) musicover.play().catch(() => {});
     }
 
-
-    playAgainBtn.classList.remove('hidden');
-    playAgainBtn.hidden = false;
-
-    gameOverMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    gameOver.hidden = false;
+    playAgainBtn.focus({ preventScroll: true });
 }
 
-function updateScore(score) {
-    scoreCont.textContent = ' score: ' + score;
+// ---------- HUD ----------
+function updateScore() {
+    scoreCont.textContent = `Score ${score} / ${winScores[difficulty]}`;
 }
 
-function restart() {
-    const character = document.getElementById('character');
-
-    score = 0;
-    cross = true;
-    timeLeft = 60;
-    updateScore(score);
-
-    gameOverMsg.textContent = '';
-    gameOverMsg.classList.remove('win', 'lose');
-    playAgainBtn.classList.add('hidden');
-    character.style.top = '200px';
-
-    clearInterval(gameLoop);
-    clearInterval(timerInterval);
-
-    fireballIds.forEach(id => {
-        const fireball = document.getElementById(id);
-        fireball.classList.remove('fireballAni');
-        void fireball.offsetWidth;
-        fireball.classList.add('fireballAni');
-        fireball.style.animationDuration = diffSpeeds[difficulty] + 's';
-        randomizeTop(fireball);
-    });
-
-    document.addEventListener('keydown', handleKeyPress);
-    beginGameLoop();
-    startTimer();
+function updateTimer() {
+    timerCont.textContent = `${Math.max(timeLeft, 0)}s`;
 }
